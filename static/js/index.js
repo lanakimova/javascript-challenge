@@ -1,32 +1,28 @@
 
 // Upload all data from data.js for page load.
 var tdata = data;
-var tBody = d3.select("#tableBody");
-tBody.on('load', init());
+
+var docBody = d3.select("#body").on('load', init());
 
 function init() {
+    var tBody = d3.select("#tableBody");
+    allData = tdata.filter(x => x.datetime);
+    buildTable(allData);
     
-    Object.values(tdata).forEach(value => {
-        tr = tBody.append("tr");
-        tr.append("td").text(value.datetime);
-
-        var city = value.city;
-        city = city[0].toUpperCase() + city.substring(1);
-        tr.append("td").text(city);
-        tr.append("td").text(value.state.toUpperCase());
-        tr.append("td").text(value.country.toUpperCase());
-        tr.append("td").text(value.shape);
-        tr.append("td").text(value.comments);
-    });
-    console.log('loaded');
+    var dropDownMenu = document.getElementById("select-date");
+    var dates = availableDate();
+    console.log(`available dates: ${dates}`);
+    for (var i=0; i < dates.length; i++) {
+       var optn = dates[i];
+       var date = document.createElement("option");
+       date.textContent = optn;
+       dropDownMenu.appendChild(date);
+    };
 };
 
 // get available dates 
 function availableDate() {
-
     var dates = [];
-    // console.log(`Dates1: ${dates}`);
-
     Object.values(tdata).forEach(value => {
         date = value.datetime;
         if (dates.indexOf(date) !== -1) {
@@ -34,33 +30,47 @@ function availableDate() {
         }
         else {
             dates.push(date);
-        }
-        
+        }        
     });
-    // console.log(`Dates2: ${dates}`);
     return dates;
 };
-console.log(availableDate());
 
-// Add available dates as dropDown menu options
-var dates = availableDate();
-var menuItems = document.getElementById("select-date");
 
-function selectDateMenu() {   
-    
-    for (var i=0; i < dates.length; i++) {
-       var optn = dates[i];
-       var date = document.createElement("option");
-       date.textContent = optn;
-       menuItems.appendChild(date);
+var slct = d3.select("#select-date").on("change", showData);
+
+function showData() {
+    var dropDownMenu = d3.select("#select-date").node().value;
+    var UFO_dateFilter;
+    if (dropDownMenu === 'Show All') {
+        UFO_dateFilter = tdata.filter(x => x.datetime);
+    }
+    else {
+        var UFO_dateFilter = tdata.filter(x => x.datetime === dropDownMenu);
     };
-
+    buildTable(UFO_dateFilter);    
 };
 
-// show data for selected date
-// !! TODO: try to add buton and read value after click on the button
-var slct = d3.select("#select-date");
-slct.on("change", showData);
+function buildTable(dateFilter) {
+    var tableBody = d3.select("#tableBody").text("");
+    Object.values(dateFilter).forEach(value => {
+        tr = tableBody.append("tr");
+        tr.append("td").text(value.datetime);
+        var city = value.city.split(" ");
+        var city_name = '';
+        console.log(value.city.split(" "));
+        for (var i=0; i < city.length; i++) {
+            var temp_city = city[i];
+            city_name = city_name + temp_city[0].toUpperCase() + temp_city.substring(1) + " ";    
+        };
+        console.log(`new city name: ${city_name}`);
+        // city = city[0].toUpperCase() + city.substring(1);
+        tr.append("td").text(city_name);
+        tr.append("td").text(value.state.toUpperCase());
+        tr.append("td").text(value.country.toUpperCase());
+        tr.append("td").text(value.shape);
+        tr.append("td").text(value.comments); 
+    });     
+};
 
 
 
