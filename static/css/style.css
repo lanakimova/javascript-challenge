@@ -1,0 +1,15 @@
+.input-group {
+    margin: auto;
+    justify-content: center;
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-top: 1%;
+}
+
+#label-id {
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    padding-top: 5px;
+}
+
