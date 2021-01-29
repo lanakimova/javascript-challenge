@@ -1,0 +1,24 @@
+h3, h5 {
+    text-align: center;
+    /* color: brown; */
+    color: #540b0e;
+    padding-bottom: 10px;
+}
+
+#headerText {
+    padding: 10px;
+}
+
+#body {
+    color: #540b0e;
+}
+
+#tableBody {
+    color: #540b0e;
+}
+
+.input-group {
+    padding-bottom: 10px;
+    border: brown;
+
+}
