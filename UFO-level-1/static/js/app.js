@@ -1,20 +1,20 @@
 
 // Upload all data from data.js for page load.
-var tdata = data;
+let tdata = data;
 
-var docBody = d3.select("#body").on('load', init());
+let docBody = d3.select("#body").on('load', init());
 
 function init() {
-    var tBody = d3.select("#tableBody");
+    let tBody = d3.select("#tableBody");
     allData = tdata.filter(x => x.datetime);
     buildTable(allData);
     
-    var dropDownMenu = document.getElementById("select-date");
-    var dates = availableDate();
+    let dropDownMenu = document.getElementById("select-date");
+    let dates = availableDate();
     console.log(`available dates: ${dates}`);
-    for (var i=0; i < dates.length; i++) {
-       var optn = dates[i];
-       var date = document.createElement("option");
+    for (let i=0; i < dates.length; i++) {
+       let optn = dates[i];
+       let date = document.createElement("option");
        date.textContent = optn;
        dropDownMenu.appendChild(date);
     };
@@ -22,7 +22,7 @@ function init() {
 
 // get available dates 
 function availableDate() {
-    var dates = [];
+    let dates = [];
     Object.values(tdata).forEach(value => {
         date = value.datetime;
         if (dates.indexOf(date) !== -1) {
@@ -36,30 +36,30 @@ function availableDate() {
 };
 
 
-var slct = d3.select("#select-date").on("change", showData);
+let slct = d3.select("#select-date").on("change", showData);
 
 function showData() {
-    var dropDownMenu = d3.select("#select-date").node().value;
-    var UFO_dateFilter;
+    let dropDownMenu = d3.select("#select-date").node().value;
+    let UFO_dateFilter;
     if (dropDownMenu === 'Show All') {
         UFO_dateFilter = tdata.filter(x => x.datetime);
     }
     else {
-        var UFO_dateFilter = tdata.filter(x => x.datetime === dropDownMenu);
+        let UFO_dateFilter = tdata.filter(x => x.datetime === dropDownMenu);
     };
     buildTable(UFO_dateFilter);    
 };
 
 function buildTable(dateFilter) {
-    var tableBody = d3.select("#tableBody").text("");
+    let tableBody = d3.select("#tableBody").text("");
     Object.values(dateFilter).forEach(value => {
         tr = tableBody.append("tr");
         tr.append("td").text(value.datetime);
-        var city = value.city.split(" ");
-        var city_name = '';
+        let city = value.city.split(" ");
+        let city_name = '';
         console.log(value.city.split(" "));
-        for (var i=0; i < city.length; i++) {
-            var temp_city = city[i];
+        for (let i=0; i < city.length; i++) {
+            let temp_city = city[i];
             city_name = city_name + temp_city[0].toUpperCase() + temp_city.substring(1) + " ";    
         };
         console.log(`new city name: ${city_name}`);

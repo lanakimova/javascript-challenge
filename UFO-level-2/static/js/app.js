@@ -2,11 +2,13 @@
 // Upload all data from data.js for page load.
 var tdata = data;
 
+// listener for page load
 var docBody = d3.select("#body").on('load', init());
 
+// init function generate content that will be shown after page is loading
 function init() {
-    var tBody = d3.select("#tableBody");
-    allData = tdata.filter(x => x.datetime);
+    let tBody = d3.select("#tableBody");
+    let allData = tdata.filter(x => x.datetime);
     buildTable(allData);
 
     createMenu(availableDate(), 'selectDate');
@@ -16,23 +18,24 @@ function init() {
     createMenu(availableShape(), 'selectShape');
 };
 
+// createMenu function accept 2 parameter: list of specific data (list of dates or list of names) and element ID.
+// Using with two parameter generate dropdown options for index.html
 function createMenu(dataList, elementID) {
-    var dropDownMenu = document.getElementById(elementID);
-    for (var i=0; i < dataList.length; i++) {
-        var optn = dataList[i];
-        var newEl = document.createElement('option');
+    let dropDownMenu = document.getElementById(elementID);
+    for (let i=0; i < dataList.length; i++) {
+        let optn = dataList[i];
+        let newEl = document.createElement('option');
         newEl.textContent = optn;
         dropDownMenu.appendChild(newEl);
     }
 }
 
-// get available dates 
+// return available unique dates from data files
 function availableDate() {
-    var dates = [];
+    let dates = [];
     Object.values(tdata).forEach(value => {
         let date = value.datetime;
         if (dates.indexOf(date) !== -1) {
-            // console.log(`value ${date} exist`)
         }
         else {
             dates.push(date);
@@ -41,8 +44,9 @@ function availableDate() {
     return dates;
 };
 
+// return available unique city names from data files
 function availableCities() {
-    var cities = [];
+    let cities = [];
     Object.values(tdata).forEach(value => {
         let city = value.city.split(" ");
         let city_name = ""
@@ -60,8 +64,9 @@ function availableCities() {
     return cities;
 }
 
+// return available unique state names from data files
 function availableState() {
-    var states = [];
+    let states = [];
     Object.values(tdata).forEach(value => {
         let state = value.state.toUpperCase();
         if(states.indexOf(state) !== -1) {
@@ -74,8 +79,9 @@ function availableState() {
     return states;
 }
 
+// return available unique country names from data files
 function availableCountry() {
-    var countries = [];
+    let countries = [];
     Object.values(tdata).forEach(value => {
         let country = value.country.toUpperCase();
         if(countries.indexOf(country) !== -1) {
@@ -88,8 +94,9 @@ function availableCountry() {
     return countries;
 }
 
+// return available unique shapes from data files
 function availableShape() {
-    var shapes = [];
+    let shapes = [];
     Object.values(tdata).forEach(value => {
         let shape = value.shape;
         shape = shape[0].toUpperCase() + shape.substring(1);
@@ -104,32 +111,80 @@ function availableShape() {
 }
 
 
+// listener for every dropdown element
+var slctDate = d3.select("#selectDate").on("change", showData);
+var slctCity = d3.select('#selectCity').on("change", showData);
+var slctState = d3.select('#selectState').on("change", showData);
+var slctCountry = d3.select("#selectCountry").on("change", showData);
+var slctShape = d3.select("#selectShape").on("change", showData);
 
-var slct = d3.select("#selectDate").on("change", showData);
-
+// main function that check input from dropdown elements, call function to  show data according this input
 function showData() {
-    var dropDownMenu = d3.select("#selectDate").node().value;
-    var UFO_dateFilter;
-    if (dropDownMenu === 'Show All') {
-        UFO_dateFilter = tdata.filter(x => x.datetime);
+
+    let showAll = 'Show All';
+
+    let dropDownDate = d3.select("#selectDate").node().value;
+    let dateValue;
+    if (dropDownDate === showAll) {
+        dateValue = x => x.datetime;
     }
     else {
-        var UFO_dateFilter = tdata.filter(x => x.datetime === dropDownMenu);
+        dateValue = x => x.datetime === dropDownDate;
+    }
+    
+    let dropDownCity = d3.select("#selectCity").node().value;
+    let cityValue;
+    if (dropDownCity === showAll){
+        cityValue = x => x.city;
+    }
+    else {
+        cityValue = x => x.city === dropDownCity.toLowerCase();
     };
-    buildTable(UFO_dateFilter);    
+
+    let dropDownState = d3.select("#selectState").node().value;
+    let stateValue;
+    if (dropDownState === showAll){
+        stateValue = x => x.state;
+    }
+    else {
+        stateValue = x => x.state === dropDownState.toLowerCase();
+    };
+
+    let dropDownCountry = d3.select("#selectCountry").node().value;
+    let countryValue;
+    if (dropDownCountry === showAll){
+        countryValue = x => x.country;
+    }
+    else {
+        countryValue = x => x.country === dropDownCountry.toLowerCase();
+    };
+
+    let dropDownShape = d3.select("#selectShape").node().value;
+    let shapeValue;
+    if (dropDownShape === showAll) {
+        shapeValue = x => x.shape;
+    }
+    else {
+        shapeValue = x => x.shape === dropDownShape.toLowerCase();
+    };
+
+    let UFOfilter = tdata.filter(dateValue).filter(cityValue).filter(stateValue).filter(countryValue).filter(shapeValue);
+
+    buildTable(UFOfilter);   
 };
 
+// function get filtered data and generate table content for it.
 function buildTable(dateFilter) {
-    var tableBody = d3.select("#tableBody").text("");
+    let tableBody = d3.select("#tableBody").text("");
     Object.values(dateFilter).forEach(value => {
         tr = tableBody.append("tr");
         tr.append("td").text(value.datetime);
 
-        var city = value.city.split(" ");
-        var city_name = '';
+        let city = value.city.split(" ");
+        let city_name = '';
         
-        for (var i=0; i < city.length; i++) {
-            var temp_city = city[i];
+        for (let i=0; i < city.length; i++) {
+            let temp_city = city[i];
             city_name = city_name + temp_city[0].toUpperCase() + temp_city.substring(1) + " ";    
         };
  
