@@ -26,7 +26,6 @@ function availableDate() {
     Object.values(tdata).forEach(value => {
         date = value.datetime;
         if (dates.indexOf(date) !== -1) {
-            // console.log(`value ${date} exist`)
         }
         else {
             dates.push(date);
@@ -45,7 +44,7 @@ function showData() {
         UFO_dateFilter = tdata.filter(x => x.datetime);
     }
     else {
-        let UFO_dateFilter = tdata.filter(x => x.datetime === dropDownMenu);
+        UFO_dateFilter = tdata.filter(x => x.datetime === dropDownMenu);
     };
     buildTable(UFO_dateFilter);    
 };
@@ -63,7 +62,6 @@ function buildTable(dateFilter) {
             city_name = city_name + temp_city[0].toUpperCase() + temp_city.substring(1) + " ";    
         };
         console.log(`new city name: ${city_name}`);
-        // city = city[0].toUpperCase() + city.substring(1);
         tr.append("td").text(city_name);
         tr.append("td").text(value.state.toUpperCase());
         tr.append("td").text(value.country.toUpperCase());

@@ -59,7 +59,8 @@ function availableCities() {
         }
         else {
             cities.push(city_name);
-        }
+            console.log("city_name");
+        };
     });
     return cities;
 }
@@ -134,6 +135,7 @@ function showData() {
     
     let dropDownCity = d3.select("#selectCity").node().value;
     let cityValue;
+    // instead of IF else use this: cityValue = (cond) ? do this: do that ;
     if (dropDownCity === showAll){
         cityValue = x => x.city;
     }
